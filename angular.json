@@ -12,7 +12,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "amc",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -95,8 +95,23 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "4d0340ca-3feb-4c45-bb6d-e9e519e0c29b",
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }
