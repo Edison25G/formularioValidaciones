@@ -14,6 +14,7 @@ export default [
 				path: 'register',
 				title: 'Register',
 				loadComponent: () => import('./pages/register/register.component'),
+
 			},
 			{
 				path: '',

@@ -1,0 +1,64 @@
+<div class="dashboard-wrapper">
+  <!-- Barra superior -->
+  <header class="topbar">
+    <div class="search-bar">
+      <input pInputText type="text" placeholder="Buscar archivos..." [(ngModel)]="searchQuery" />
+      <button pButton icon="pi pi-search" class="p-button-text" (click)="searchFiles()"></button>
+    </div>
+    <div class="user-info">
+      <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle"></p-avatar>
+      <span class="username">Amy Elsner</span>
+    </div>
+  </header>
+
+  <!-- Contenedor principal -->
+  <div class="main-container">
+    <!-- Menú lateral -->
+    <aside class="sidebar">
+      <p-panelmenu [model]="menuItems" styleClass="w-full md:w-80"></p-panelmenu>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="content">
+      <p-toast></p-toast>
+
+      <!-- Crear nueva carpeta -->
+      <div class="create-folder">
+        <h2>Crear Nueva Carpeta</h2>
+        <div class="form-group">
+          <p-floatlabel>
+            <input pInputText id="folderName" type="text" [(ngModel)]="newFolderName" />
+            <label for="folderName">Nombre de la Carpeta</label>
+          </p-floatlabel>
+          <button pButton label="Crear" icon="pi pi-folder" (click)="createFolder()"></button>
+        </div>
+      </div>
+
+      <!-- Tabla de archivos -->
+      <div class="file-table">
+        <p-table [value]="filteredFiles" [paginator]="true" [rows]="10" [responsiveLayout]="'scroll'">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Nombre del Archivo</th>
+              <th>Tamaño</th>
+              <th>Fecha de Subida</th>
+              <th>Acciones</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-file>
+            <tr>
+              <td>{{ file.name }}</td>
+              <td>{{ file.size }}</td>
+              <td>{{ file.uploadDate }}</td>
+              <td>
+                <button pButton icon="pi pi-eye" class="p-button-text" (click)="viewFile(file)"></button>
+                <button pButton icon="pi pi-trash" class="p-button-text" (click)="deleteFile(file)"></button>
+                <button pButton icon="pi pi-print" class="p-button-text" (click)="printFile(file)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </main>
+  </div>
+</div>

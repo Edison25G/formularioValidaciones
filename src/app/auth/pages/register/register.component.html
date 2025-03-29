@@ -1,2 +1,98 @@
-<p>register works!</p>
-,
+<p-toast></p-toast>
+
+<body>
+  <div class="wrapper">
+    <div class="login_box">
+      <!-- Encabezado -->
+      <div class="login-header">
+        <img class="logo" src="img/login.png" />
+        <span>Registrar Usuario</span>
+      </div>
+
+      <!-- Formulario -->
+      <form [formGroup]="registerForm" (ngSubmit)="register()" class="card">
+        <!-- Usuario -->
+        <div class="form-group">
+          <p-floatlabel>
+            <input id="username" pInputText formControlName="username" />
+            <label for="username">Usuario</label>
+          </p-floatlabel>
+          <small *ngIf="registerForm.get('username')?.touched && registerForm.get('username')?.invalid" class="text-red-500">
+          </small>
+        </div>
+
+        <!-- Correo -->
+        <div class="form-group">
+          <p-floatlabel>
+            <input id="email" pInputText formControlName="email" />
+            <label for="email">Correo Electrónico</label>
+          </p-floatlabel>
+          <small *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')" class="text-red-500">
+          </small>
+          <small *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')" class="text-red-500">
+          </small>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+          <p-floatlabel>
+            <p-password
+              inputId="password"
+              formControlName="password"
+              [toggleMask]="true"
+              [feedback]="true"
+            ></p-password>
+            <label for="password">Contraseña</label>
+          </p-floatlabel>
+          <small *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required')" class="text-red-500">
+          </small>
+          <small *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.hasError('minlength')" class="text-red-500">
+            Mínimo 6 caracteres
+          </small>
+        </div>
+
+        <!-- Confirmar Contraseña -->
+        <div class="form-group">
+          <p-floatlabel>
+            <p-password
+              inputId="confirmPassword"
+              formControlName="confirmPassword"
+              [toggleMask]="true"
+              [feedback]="false"
+            ></p-password>
+            <label for="confirmPassword">Confirmar Contraseña</label>
+          </p-floatlabel>
+          <small *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.invalid" class="text-red-500">
+          </small>
+        </div>
+
+        <!-- Botón registrar -->
+        <div class="form-group">
+          <button
+            pButton
+            type="submit"
+            label="Registrar"
+            icon="pi pi-user-plus"
+            class="w-full"
+          ></button>
+        </div>
+      </form>
+
+      <!-- Separador -->
+      <div class="separator mt-4">
+        <p-divider layout="horizontal" align="center">o</p-divider>
+      </div>
+
+      <!-- Volver al Login -->
+      <div class="form-group flex justify-center gap-4 mt-3">
+        ¿Ya tienes cuenta?
+        <button
+          pButton
+          label="Iniciar Sesión"
+          class="font-bold"
+          routerLink="/auth/login"
+        ></button>
+      </div>
+    </div>
+  </div>
+</body>

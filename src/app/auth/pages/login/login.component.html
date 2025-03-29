@@ -1,2 +1,72 @@
-<p>login works!</p>
-,
+<p-toast></p-toast>
+
+<body>
+  <div class="wrapper">
+    <div class="login_box">
+      <!-- Encabezado -->
+      <div class="login-header">
+        <img class="logo" src="img/login.png" />
+        <span>Hola, ¡Bienvenido!</span>
+      </div>
+
+      <!-- Formulario -->
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="card">
+        <!-- Usuario -->
+        <div class="form-group">
+          <p-floatlabel>
+            <input id="username" pInputText formControlName="username" />
+            <label for="username">Usuario</label>
+          </p-floatlabel>
+          <small *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid" class="text-red-500">
+            Usuario es obligatorio
+          </small>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+          <p-floatlabel>
+            <p-password
+              inputId="contraseña"
+              formControlName="contraseña"
+              [toggleMask]="true"
+              [feedback]="false"
+              class="w-full"
+              inputClass="w-full p-2"
+            ></p-password>
+            <label for="contraseña">Contraseña</label>
+          </p-floatlabel>
+          <small *ngIf="loginForm.get('contraseña')?.touched && loginForm.get('contraseña')?.invalid" class="text-red-500">
+            Contraseña es obligatoria
+          </small>
+        </div>
+
+        <!-- Botón ingresar -->
+        <div class="form-group">
+          <button
+            pButton
+            type="submit"
+            label="Ingresar"
+            icon="pi pi-sign-in"
+            class="w-full"
+          ></button>
+        </div>
+      </form>
+
+      <!-- Separador -->
+      <div class="separator mt-4">
+        <p-divider layout="horizontal" align="center">o</p-divider>
+      </div>
+
+      <!-- Ir a registrarse -->
+      <div class="form-group flex justify-center gap-4 mt-3">
+        ¿No tienes cuenta?
+        <button
+          pButton
+          label="Registrarse"
+          class="font-bold"
+          routerLink="/auth/register"
+        ></button>
+      </div>
+    </div>
+  </div>
+</body>
