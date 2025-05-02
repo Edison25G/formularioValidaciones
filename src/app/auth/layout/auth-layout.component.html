@@ -1,21 +1,6 @@
-<section style="background-color: #e0f7e9; min-height: 100vh;"> <!-- Fondo verde agua -->
-  <router-outlet></router-outlet>
+<section class="bg-primary h-screen grid grid-rows-[1fr_130px]">
+	<main class="sm:flex sm:justify-center sm:items-center mb-3 h-full">
+		<router-outlet />
+	</main>
+	<amc-footer />
 </section>
-
-<div class="auth-container">
-  <div class="auth-content">
-    <!-- Aquí puedes agregar contenido adicional si es necesario -->
-  </div>
-</div>
-
-<!-- Footer -->
-<footer class="footer">
-  <div class="container">
-    <p>© 2025 COAC. Todos los derechos reservados.</p>
-    <div class="footer-links">
-      <a routerLink="/privacy-policy">Política de Privacidad</a> |
-      <a routerLink="/terms">Términos y Condiciones</a> |
-      <a routerLink="/terms">Desarrollado por: Edison Unaucho</a>
-    </div>
-  </div>
-</footer>

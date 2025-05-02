@@ -6,10 +6,10 @@ export const routes: Routes = [
 		loadChildren: () => import('./auth/auth.routes'),
 	},
 
-  {
-    path: 'dashboard',
-    loadChildren: () => import('./dashboard/dashboard.routes'),
-  },
+	{
+		path: 'dashboard',
+		loadChildren: () => import('./dashboard/dashboard.routes'),
+	},
 
 	{
 		path: '',
@@ -17,10 +17,9 @@ export const routes: Routes = [
 		pathMatch: 'full',
 	},
 
-  {
-    path: '**',
-    redirectTo: '/auth/login',
-    pathMatch: 'full',
-  },
-
+	{
+		path: '**',
+		redirectTo: '/auth/login',
+		pathMatch: 'full',
+	},
 ];

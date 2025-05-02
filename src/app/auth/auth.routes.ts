@@ -7,14 +7,13 @@ export default [
 		children: [
 			{
 				path: 'login',
-				title: 'Login',
+				title: 'Inicio de sesión',
 				loadComponent: () => import('./pages/login/login.component'),
 			},
 			{
 				path: 'register',
-				title: 'Register',
+				title: 'Registro de usuario',
 				loadComponent: () => import('./pages/register/register.component'),
-
 			},
 			{
 				path: '',
