@@ -1,8 +1,9 @@
 <form
+	*ngIf="loginForm"
 	class="w-full sm:w-[500px] bg-white p-4 rounded-xl shadow-2xl h-full"
 	autocomplete="off"
 	[formGroup]="loginForm"
-	(ngSubmit)="onLogin()"
+	(ngSubmit)="login()"
 >
 	<div class="flex justify-center mb-3">
 		<img src="assets/img/login.png" width="80" height="80" alt="logo" />
@@ -10,43 +11,56 @@
 
 	<h1 class="text-3xl font-bold text-center mb-3">Hola, ¡Bienvenido!</h1>
 
-	<div class="mt-[30px]">
-		<p-floatlabel>
-			<input pInputText class="w-full" formControlName="username" />
-			<label for="username">Usuario</label>
-		</p-floatlabel>
-		<!-- <small *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid" class="text-red-500">
-			Usuario es obligatorio
-		</small> -->
-	</div>
+	<div class="space-y-6">
+		<div>
+			<p-floatlabel>
+				<input
+					pInputText
+					class="w-full"
+					formControlName="username"
+					id="username"
+					name="username"
+					autocomplete="username"
+				/>
+				<label for="username">Usuario</label>
+			</p-floatlabel>
+		</div>
 
-	<div class="mt-[40px]">
-		<p-floatlabel>
-			<p-password
-				formControlName="password"
-				[toggleMask]="true"
-				[feedback]="false"
-				inputStyleClass="w-full"
-				[style]="{ width: '100%' }"
-			></p-password>
-			<label for="password">Contraseña</label>
-		</p-floatlabel>
-		<!-- <small *ngIf="loginForm.get('contraseña')?.touched && loginForm.get('contraseña')?.invalid" class="text-red-500">
-      Contraseña es obligatoria
-    </small> -->
-	</div>
+		<div>
+			<p-floatlabel>
+				<p-password
+					inputId="password"
+					formControlName="contraseña"
+					name="password"
+					autocomplete="current-password"
+					[toggleMask]="true"
+					[feedback]="false"
+					inputStyleClass="w-full"
+					[style]="{ width: '100%' }"
+				></p-password>
+				<label for="password">Contraseña</label>
+			</p-floatlabel>
+		</div>
 
-	<div class="mt-[30px]">
-		<button type="submit" pButton class="w-full">Ingresar</button>
-	</div>
+		<p-button
+			type="submit"
+			label="Ingresar"
+			[disabled]="isLoading"
+			[icon]="isLoading ? 'pi pi-spin pi-spinner' : ''"
+			class="w-full mt-3"
+		></p-button>
+		<div class="text-center mt-2">
+			<a routerLink="/auth/forgot-password" class="text-blue-600 font-semibold hover:underline">
+				¿Olvidaste tu contraseña?
+			</a>
+		</div>
+		<div>
+			<p-divider layout="horizontal" align="center">o</p-divider>
+		</div>
 
-	<div class="mt-4">
-		<p-divider layout="horizontal" align="center">o</p-divider>
-	</div>
-
-	<div class="flex items-center gap-4 mt-[30px]">
-		¿No tienes cuenta?
-		<button type="button" pButton routerLink="/auth/register">Registrarse</button>
+		<div class="flex items-center gap-4 justify-center">
+			¿No tienes cuenta?
+			<button type="button" pButton class="font-bold" routerLink="/auth/register">Registrarse</button>
+		</div>
 	</div>
 </form>
-<p-toast />

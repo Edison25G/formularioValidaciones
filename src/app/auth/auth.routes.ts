@@ -16,6 +16,22 @@ export default [
 				loadComponent: () => import('./pages/register/register.component'),
 			},
 			{
+				path: 'forgot-password',
+				title: 'Recuperar contraseña',
+				loadComponent: () => import('./pages/forgot-password/forgot-password.component'),
+			},
+			{
+				path: 'verify-code',
+				title: 'Verificar Código',
+				loadComponent: () => import('./pages/verify-code/verify-code.component'),
+			},
+			{
+				path: 'reset-password',
+				title: 'Cambiar contraseña',
+				loadComponent: () => import('./pages/reset-password/reset-password.component'),
+			},
+
+			{
 				path: '',
 				redirectTo: 'login',
 				pathMatch: 'full',

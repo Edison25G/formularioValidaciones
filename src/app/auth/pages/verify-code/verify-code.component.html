@@ -1,0 +1,39 @@
+<form
+	*ngIf="codeForm"
+	[formGroup]="codeForm"
+	(ngSubmit)="verify()"
+	class="w-full sm:w-[500px] bg-white p-4 rounded-xl shadow-2xl h-full"
+	autocomplete="off"
+>
+	<div class="flex justify-center mb-3">
+		<img src="assets/img/login.png" width="80" height="80" alt="logo" />
+	</div>
+
+	<h1 class="text-xl font-bold text-center mb-5">Verificar Código</h1>
+
+	<div class="space-y-5">
+		<div>
+			<p-floatlabel>
+				<input id="code" name="code" autocomplete="one-time-code" pInputText formControlName="code" class="w-full" />
+				<label for="code">Código de verificación</label>
+			</p-floatlabel>
+			<small *ngIf="codeForm.get('code')?.touched && codeForm.get('code')?.invalid" class="text-red-500">
+				Código obligatorio de 6 dígitos
+			</small>
+		</div>
+
+		<p-button
+			pButton
+			type="submit"
+			label="Verificar"
+			[disabled]="isLoading"
+			[icon]="isLoading ? 'pi pi-spin pi-spinner' : ''"
+			class="w-full mt-3"
+		></p-button>
+
+		<div class="flex items-center justify-center text-sm gap-2">
+			¿No recibiste el código?
+			<a class="text-blue-600 font-bold cursor-pointer" routerLink="/auth/forgot-password"> Reenviar </a>
+		</div>
+	</div>
+</form>

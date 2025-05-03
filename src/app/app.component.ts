@@ -1,20 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+
+import { SessionService } from '@dashboard/core/services/sessions.service';
+import { AuthService } from '@auth/core/services/auth.service';
 
 @Component({
 	selector: 'amc-root',
-	imports: [RouterOutlet, ButtonModule],
+	standalone: true,
+	imports: [RouterOutlet, ButtonModule, ToastModule],
+	providers: [],
 	templateUrl: './app.component.html',
 	styleUrl: './app.component.css',
-	providers: [MessageService],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 	title = 'primeg';
-	constructor(private messageService: MessageService) {}
 
-	show() {
-		this.messageService.add({ severity: 'info', summary: 'detail', detail: 'Message Content', life: 3000 });
+	constructor(
+		private sessionService: SessionService,
+		private authService: AuthService,
+	) {}
+
+	ngOnInit(): void {
+		if (this.authService.isAuthenticated()) {
+			this.sessionService.startWatcher();
+		}
 	}
 }

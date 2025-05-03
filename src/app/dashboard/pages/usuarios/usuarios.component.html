@@ -1,0 +1,186 @@
+<p-toast></p-toast>
+
+<div class="card mb-35">
+	<p-toolbar styleClass="mb-6">
+		<ng-template #start>
+			<p-button
+				label="Nuevo Usuario"
+				icon="pi pi-user-plus"
+				(click)="openUserModal()"
+				class="mr-2"
+				severity="success"
+			/>
+		</ng-template>
+	</p-toolbar>
+
+	<p-table
+		#dt
+		[value]="users"
+		[paginator]="true"
+		[rows]="5"
+		[rowsPerPageOptions]="[5, 10, 20]"
+		[globalFilterFields]="['username', 'email', 'role']"
+		[responsiveLayout]="'scroll'"
+		dataKey="id"
+		[rowHover]="true"
+		currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+		[showCurrentPageReport]="true"
+		[tableStyle]="{ 'min-width': '75rem' }"
+	>
+		<ng-template pTemplate="caption">
+			<div class="flex items-center justify-between">
+				<span class="text-xl font-semibold">Gestión de Usuarios</span>
+				<p-iconfield>
+					<p-inputicon styleClass="pi pi-search" />
+					<input
+						pInputText
+						type="text"
+						placeholder="Buscar..."
+						(input)="filterGlobal($event, dt)"
+						class="w-full sm:w-64"
+					/>
+				</p-iconfield>
+			</div>
+		</ng-template>
+
+		<ng-template pTemplate="header">
+			<tr>
+				<th>#</th>
+				<th pSortableColumn="username">
+					Usuario
+					<p-sortIcon field="username" />
+				</th>
+				<th pSortableColumn="email">
+					Correo
+					<p-sortIcon field="email" />
+				</th>
+				<th pSortableColumn="role">
+					Rol
+					<p-sortIcon field="role" />
+				</th>
+				<th>Fecha</th>
+				<th>Foto</th>
+				<th>Acciones</th>
+			</tr>
+		</ng-template>
+
+		<ng-template pTemplate="body" let-user let-i="rowIndex">
+			<tr>
+				<td>{{ i + 1 }}</td>
+				<td>{{ user.username }}</td>
+				<td>{{ user.email }}</td>
+				<td>
+					<p-tag [value]="user.role" [severity]="user.role === 'admin' ? 'success' : 'info'"></p-tag>
+				</td>
+				<td class="whitespace-nowrap text-center text-sm text-gray-700">
+					{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+				</td>
+				<td>
+					<div class="flex justify-center items-center h-full">
+						<ng-container *ngIf="user.photo; else defaultIcon">
+							<img [src]="user.photo" alt="foto" class="w-10 h-10 rounded-full object-cover" />
+						</ng-container>
+						<ng-template #defaultIcon>
+							<i class="pi pi-user text-2xl text-gray-400"></i>
+						</ng-template>
+					</div>
+				</td>
+
+				<td class="flex gap-2">
+					<p-button icon="pi pi-pencil" rounded outlined size="small" (click)="openEditModal(user)"></p-button>
+
+					<p-button
+						icon="pi pi-trash"
+						severity="danger"
+						rounded
+						outlined
+						size="small"
+						pTooltip="Eliminar"
+						tooltipPosition="top"
+						(click)="deleteUser(user.id)"
+					></p-button>
+				</td>
+			</tr>
+		</ng-template>
+
+		<ng-template pTemplate="emptymessage">
+			<tr>
+				<td colspan="7">No hay usuarios registrados.</td>
+			</tr>
+		</ng-template>
+	</p-table>
+</div>
+
+<p-dialog
+	[(visible)]="showUserModal"
+	[modal]="true"
+	[closable]="true"
+	header="{{ isEditMode ? 'Editar Usuario' : 'Registrar Usuario' }}"
+	[style]="{
+		width: userForm.get('role')?.value === 'user' ? '700px' : '500px',
+		maxWidth: '90vw',
+	}"
+	[contentStyle]="{ 'max-height': '75vh', overflow: 'auto' }"
+>
+	<form [formGroup]="userForm" (ngSubmit)="isEditMode ? updateUser() : saveUser()" class="space-y-4">
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+			<input
+				pInputText
+				formControlName="username"
+				placeholder="Usuario"
+				class="w-full"
+				[ngClass]="{ 'p-invalid': userForm.get('username')?.invalid && userForm.get('username')?.touched }"
+			/>
+
+			<input
+				pInputText
+				formControlName="email"
+				placeholder="Correo electrónico"
+				class="w-full"
+				[ngClass]="{ 'p-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched }"
+			/>
+
+			<input
+				pInputText
+				formControlName="password"
+				type="password"
+				placeholder="Contraseña"
+				class="w-full"
+				[ngClass]="{ 'p-invalid': userForm.get('password')?.invalid && userForm.get('password')?.touched }"
+			/>
+
+			<input pInputText formControlName="photo" placeholder="URL de la foto (opcional)" class="w-full" />
+
+			<input pInputText formControlName="role" [readonly]="true" class="w-full bg-gray-100 text-gray-700" />
+
+			<div *ngIf="userForm.get('role')?.value === 'user'" class="space-y-4 sm:col-span-2">
+				<p-multiSelect
+					formControlName="accionesPermitidas"
+					[options]="accionesDisponibles"
+					optionLabel="label"
+					placeholder="Seleccionar acciones permitidas"
+					display="chip"
+					class="w-full"
+					appendTo="body"
+				/>
+
+				<p-multiSelect
+					formControlName="categoriasPermitidas"
+					[options]="categorias"
+					optionLabel="name"
+					placeholder="Seleccionar categorías permitidas"
+					display="chip"
+					class="w-full"
+					appendTo="body"
+				/>
+			</div>
+		</div>
+
+		<div class="flex justify-end gap-2 pt-4">
+			<p-button pButton label="Cancelar" class="p-button-secondary" type="button" (click)="closeUserModal()"></p-button>
+			<p-button pButton label="Guardar" icon="pi pi-check" class="p-button-primary" type="submit"></p-button>
+		</div>
+	</form>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
