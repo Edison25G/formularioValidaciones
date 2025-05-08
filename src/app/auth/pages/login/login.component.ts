@@ -63,9 +63,8 @@ export default class LoginComponent implements OnInit {
 		const credentials = this.loginForm.value;
 
 		this.userService.login(credentials).subscribe({
-			next: ({ token, refreshToken }) => {
+			next: ({ token }) => {
 				this.authService.saveToken(token);
-				this.authService.saveRefreshToken(refreshToken);
 
 				// 2. Obtener datos del usuario desde /me
 				this.authService.getProfile().subscribe({
@@ -94,7 +93,7 @@ export default class LoginComponent implements OnInit {
 			error: (err) => {
 				this.isLoading = false;
 				this.errorService.loginError(err);
-				this.loginForm.get('contraseña')?.reset();
+				this.loginForm.reset();
 			},
 		});
 	}

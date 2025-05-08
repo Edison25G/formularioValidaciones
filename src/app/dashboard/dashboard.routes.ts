@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { RoleGuard } from '../auth/core/guards/role.guard';
-import { categoryGuard } from './core/guards/category.guard'; // Ajusta la ruta según tu estructura
-import { UserOnlyGuard } from '../auth/core/guards/user-only.guard'; // Ajusta la ruta según tu estructura
+import { categoryGuard } from './core/guards/category.guard';
+import { UserOnlyGuard } from '../auth/core/guards/user-only.guard';
 export default [
 	{
 		path: '',
@@ -26,9 +26,8 @@ export default [
 					import('./pages/gestionar-categoria/gestionar-categorias.component').then(
 						(m) => m.GestionarCategoriasComponent,
 					),
-				canActivate: [RoleGuard], // 🔐 solo para admins, si usas RoleGuard
+				canActivate: [RoleGuard],
 			},
-
 			{
 				path: 'users',
 				loadComponent: () => import('./pages/usuarios/usuarios.component').then((m) => m.UsuariosComponent),
@@ -43,7 +42,6 @@ export default [
 				loadComponent: () =>
 					import('./pages/configuracion/configuracion.component').then((m) => m.ConfiguracionComponent),
 			},
-
 			{
 				path: 'categoria/:nombre',
 				loadComponent: () =>
@@ -52,7 +50,6 @@ export default [
 					),
 				canActivate: [categoryGuard],
 			},
-
 			{
 				path: '',
 				redirectTo: 'home',

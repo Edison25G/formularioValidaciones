@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@envs/environment';
 import { Observable } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-
 import { User } from '../interfaces/user.interfaces';
 import { RolesUsuario, JwtPayload, UserSession, ApiResponse } from '../types';
 
@@ -13,21 +12,12 @@ import { RolesUsuario, JwtPayload, UserSession, ApiResponse } from '../types';
 export class AuthService {
 	private tokenKey = 'token';
 	private userKey = 'user';
-	private refreshKey = 'refreshToken';
 	private myAppUrl = environment.apiUrl;
 
 	constructor(private http: HttpClient) {}
 
 	saveToken(token: string): void {
 		localStorage.setItem(this.tokenKey, token);
-	}
-
-	saveRefreshToken(token: string): void {
-		localStorage.setItem(this.refreshKey, token);
-	}
-
-	getRefreshToken(): string | null {
-		return localStorage.getItem(this.refreshKey);
 	}
 
 	saveUserSession(user: UserSession): void {
@@ -108,7 +98,6 @@ export class AuthService {
 	logout(): void {
 		localStorage.removeItem(this.tokenKey);
 		localStorage.removeItem(this.userKey);
-		localStorage.removeItem(this.refreshKey);
 	}
 
 	getProfile(): Observable<User> {

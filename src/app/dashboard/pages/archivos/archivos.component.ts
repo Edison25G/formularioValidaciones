@@ -12,6 +12,7 @@ import { FileUploadModule, FileUpload } from 'primeng/fileupload';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SelectModule } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
+import { MESES } from '@dashboard/core/constants/meses.const';
 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FilesService } from '../../core/services/files.service';
@@ -20,12 +21,10 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { HttpClient } from '@angular/common/http';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { CategoryService } from '../../core/services/categories.service';
-import { MonthService } from '../../core/services/months.service';
 import { AuthService } from '@auth/core/services/auth.service';
 import { environment } from '@envs/environment';
 import { User } from '@auth/core/interfaces/user.interfaces';
 import { DropdownOption } from '@auth/core/interfaces/dropdown-option.interface';
-import { Month } from '@dashboard/core/interfaces/month.interface';
 import { Categoria } from '@dashboard/core/interfaces/categories.interface';
 
 @Component({
@@ -69,7 +68,8 @@ export class ArchivosComponent implements OnInit {
 	mostrarModalEditar = false;
 	archivoEditar: any = {};
 	categorias: Categoria[] = [];
-	meses: Month[] = [];
+	meses: { label: string; value: string }[] = MESES;
+
 	opcionesCategorias: DropdownOption[] = [];
 	categoriaSeleccionada: string | null = null;
 	mesSeleccionado: string | null = null;
@@ -90,7 +90,6 @@ export class ArchivosComponent implements OnInit {
 		private confirmationService: ConfirmationService,
 		private http: HttpClient,
 		private categoryService: CategoryService,
-		private monthService: MonthService,
 		private authService: AuthService,
 	) {}
 
@@ -113,7 +112,6 @@ export class ArchivosComponent implements OnInit {
 				this.cargarArchivos();
 			}
 			this.cargarCategorias();
-			this.cargarMeses();
 		}, 200);
 	}
 
@@ -128,21 +126,6 @@ export class ArchivosComponent implements OnInit {
 			},
 			error: (err) => {
 				console.error('Error al cargar categorías:', err);
-			},
-		});
-	}
-
-	cargarMeses() {
-		this.monthService.getMonths().subscribe({
-			next: (data: Month[]) => {
-				this.meses = data.map((mes) => ({
-					...mes,
-					label: mes.name,
-					value: mes.slug,
-				}));
-			},
-			error: (err) => {
-				console.error('Error al cargar meses:', err);
 			},
 		});
 	}

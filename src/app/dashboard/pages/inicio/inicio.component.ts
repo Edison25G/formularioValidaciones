@@ -37,12 +37,9 @@ export class InicioComponent implements OnInit {
 		const storedUser = localStorage.getItem('user');
 		if (storedUser) {
 			this.user = JSON.parse(storedUser) as User;
-			console.log('Usuario cargado:', this.user);
 		}
 
 		this.dashboardService.getDashboardData().subscribe((data: DashboardData) => {
-			console.log('Respuesta:', data);
-
 			this.totalUsuarios = data.usuarios.length;
 			this.totalCategorias = data.categorias.length;
 			this.totalArchivos = data.archivos?.length || 0;

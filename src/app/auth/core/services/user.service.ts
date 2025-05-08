@@ -17,8 +17,8 @@ export class UserService {
 		return this.http.post<ApiResponse>(`${this.apiBaseUrl}/register`, user);
 	}
 
-	login(user: User): Observable<{ token: string; refreshToken: string }> {
-		return this.http.post<{ token: string; refreshToken: string }>(`${this.apiBaseUrl}/login`, user);
+	login(user: User): Observable<{ token: string }> {
+		return this.http.post<{ token: string }>(`${this.apiBaseUrl}/login`, user);
 	}
 
 	getAll(): Observable<User[]> {

@@ -43,17 +43,25 @@ export class ErrorService {
 	}
 
 	registrationError(error: ApiError): void {
-		if (error?.error?.msg?.includes('ya existe')) {
+		const msg = error?.error?.msg?.toLowerCase?.();
+
+		if (msg?.includes('correo')) {
 			this.messageService.add({
 				severity: 'warn',
 				summary: 'Registro fallido',
-				detail: error.error.msg,
+				detail: 'El correo electrónico ya está registrado.',
+			});
+		} else if (msg?.includes('usuario')) {
+			this.messageService.add({
+				severity: 'warn',
+				summary: 'Registro fallido',
+				detail: 'El nombre de usuario ya está registrado.',
 			});
 		} else {
 			this.messageService.add({
 				severity: 'error',
 				summary: 'Error',
-				detail: 'No se pudo registrar. Comuniquese con el administrador.',
+				detail: 'No se pudo registrar. Comuníquese con el administrador.',
 			});
 		}
 	}

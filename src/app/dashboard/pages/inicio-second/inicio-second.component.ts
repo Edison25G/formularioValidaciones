@@ -18,7 +18,6 @@ export class InicioSecondComponent implements OnInit {
 		const storedUser = localStorage.getItem('user');
 		if (storedUser) {
 			this.user = JSON.parse(storedUser);
-			console.log('Usuario cargado:', this.user);
 		}
 	}
 

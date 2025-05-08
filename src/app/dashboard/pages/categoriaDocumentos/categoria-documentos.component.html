@@ -183,22 +183,32 @@
 						</td>
 					</tr>
 				</ng-template>
-
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td colspan="3" class="text-center text-gray-500 py-10">
+						<td colspan="5" class="text-center text-gray-500 py-10">
 							<i class="pi pi-file" style="font-size: 3rem"></i>
-							<p class="mt-4">No hay documentos disponibles en esta categoría.</p>
+							<p class="mt-4">
+								{{
+									tieneDocumentosOriginales
+										? 'No hay documentos que coincidan con los filtros aplicados.'
+										: 'No hay documentos disponibles en esta categoría.'
+								}}
+							</p>
 						</td>
 					</tr>
 				</ng-template>
 			</p-table>
 		</ng-container>
-
 		<ng-template #noDocumentos>
 			<div class="text-center text-gray-500 py-10">
 				<i class="pi pi-file" style="font-size: 3rem"></i>
-				<p class="mt-4">No hay documentos disponibles en esta categoría.</p>
+				<p class="mt-4">
+					{{
+						tieneDocumentosOriginales
+							? 'No hay documentos que coincidan con los filtros aplicados.'
+							: 'No hay documentos disponibles en esta categoría.'
+					}}
+				</p>
 			</div>
 		</ng-template>
 	</div>

@@ -17,12 +17,11 @@ import { SelectModule } from 'primeng/select';
 import { FilesService } from '../../core/services/files.service';
 import { File } from '@auth/core/interfaces/file.interface';
 import { environment } from '@envs/environment';
-import { MonthService } from '../../core/services/months.service';
 import { AuthService } from '@auth/core/services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { Month } from '@dashboard/core/interfaces/month.interface';
 import { User } from '@auth/core/interfaces/user.interfaces';
 import { Anio } from '../../core/interfaces/anio.inertface';
+import { MESES } from '@dashboard/core/constants/meses.const';
 
 @Component({
 	selector: 'app-categoria-documentos',
@@ -59,7 +58,9 @@ export class CategoriaDocumentosComponent implements OnInit {
 	busqueda = '';
 	anioSeleccionado: number | null = null;
 	mesSeleccionado = '';
-	meses: Month[] = [];
+	meses: { label: string; value: string }[] = MESES;
+	tieneDocumentosOriginales = false;
+
 	anios: Anio[] = [];
 	puedeVer = false;
 	puedeDescargar = false;
@@ -70,7 +71,6 @@ export class CategoriaDocumentosComponent implements OnInit {
 		private filesService: FilesService,
 		private messageService: MessageService,
 		private confirmationService: ConfirmationService,
-		private monthService: MonthService,
 		private router: Router,
 		private authService: AuthService,
 		private http: HttpClient,
@@ -93,6 +93,10 @@ export class CategoriaDocumentosComponent implements OnInit {
 			const nombre = params.get('nombre');
 			if (nombre) {
 				this.nombreCategoria = decodeURIComponent(nombre);
+				this.busqueda = '';
+				this.mesSeleccionado = '';
+				this.anioSeleccionado = null;
+
 				if (this.user.role === 'admin' || (this.user.categoriasPermitidas || []).includes(this.nombreCategoria)) {
 					this.permitido = true;
 					this.cargarDocumentos();
@@ -101,14 +105,17 @@ export class CategoriaDocumentosComponent implements OnInit {
 				}
 			}
 		});
-		this.cargarMeses();
 	}
 
 	cargarDocumentos() {
 		this.filesService.getFiles().subscribe({
 			next: (files) => {
 				this.documentos = files.filter((file) => file.categoria?.toLowerCase() === this.nombreCategoria.toLowerCase());
-				this.filtrarDocumentos();
+
+				// ✅ Aquí marcamos si la categoría tiene documentos originales
+				this.tieneDocumentosOriginales = this.documentos.length > 0;
+
+				this.filtrarDocumentos(); // ← Aplica filtros si están activos
 			},
 			error: (err) => {
 				console.error('Error al cargar documentos:', err);
@@ -124,21 +131,6 @@ export class CategoriaDocumentosComponent implements OnInit {
 			const coincideAnio = this.anioSeleccionado ? Number(doc.anio) === this.anioSeleccionado : true;
 
 			return coincideBusqueda && coincideMes && coincideAnio;
-		});
-	}
-
-	cargarMeses() {
-		this.monthService.getMonths().subscribe({
-			next: (data: Month[]) => {
-				this.meses = data.map((mes) => ({
-					...mes,
-					label: mes.name,
-					value: mes.slug,
-				}));
-			},
-			error: (err) => {
-				console.error('Error al cargar meses:', err);
-			},
 		});
 	}
 

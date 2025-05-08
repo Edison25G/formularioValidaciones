@@ -22,6 +22,7 @@ import { ValidatorUtils } from '../../../utils/validator.utils';
 import { CategoryService } from '@dashboard/core/services/categories.service';
 import { Categoria } from '@dashboard/core/interfaces/categories.interface'; // Ajusta la ruta según la estructura de tu proyecto
 import { Accion } from '@auth/core/interfaces/accion.interface';
+import { AuthService } from '@auth/core/services/auth.service';
 
 @Component({
 	selector: 'app-usuarios',
@@ -75,6 +76,7 @@ export class UsuariosComponent implements OnInit {
 		private messageService: MessageService,
 		private cd: ChangeDetectorRef,
 		private categoryService: CategoryService,
+		private authService: AuthService,
 	) {}
 
 	ngOnInit(): void {
@@ -182,13 +184,10 @@ export class UsuariosComponent implements OnInit {
 			this.errorService.invalidPasswordFormat();
 			return;
 		}
+		this.userForm.value.accionesPermitidas = (this.userForm.value.accionesPermitidas || []).map((a: Accion) => a.value);
 
-		this.userForm.value.accionesPermitidas = this.userForm.value.accionesPermitidas.map(
-			(a: Accion) => a.value, // Usamos `value` directamente desde la interfaz `Accion`
-		);
-
-		this.userForm.value.categoriasPermitidas = this.userForm.value.categoriasPermitidas.map(
-			(cat: Categoria) => cat.slug, // Usamos `slug` directamente desde la interfaz `Categoria`
+		this.userForm.value.categoriasPermitidas = (this.userForm.value.categoriasPermitidas || []).map(
+			(cat: Categoria) => cat.slug,
 		);
 
 		const payload = {
@@ -250,6 +249,7 @@ export class UsuariosComponent implements OnInit {
 					detail: `El usuario "${username}" fue actualizado correctamente.`,
 					life: 3000,
 				});
+				this.authService.refreshUserFromBackend();
 			},
 			error: (err) => {
 				this.errorService.registrationError(err);
