@@ -39,20 +39,11 @@ export class AuthService {
 	}
 
 	isTokenExpired(): boolean {
-		const token = this.getToken();
-		if (!token) return true;
-
-		try {
-			const decoded: JwtPayload = jwtDecode(token);
-			const currentTime = Math.floor(Date.now() / 1000);
-			return decoded.exp < currentTime;
-		} catch {
-			return true;
-		}
+		return false;
 	}
 
 	isAuthenticated(): boolean {
-		return !!this.getToken() && !this.isTokenExpired();
+		return !!this.getToken();
 	}
 
 	getUsername(): string {

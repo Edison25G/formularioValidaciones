@@ -29,11 +29,13 @@
 
 		<!-- Menú de navegación -->
 		<div class="flex-1 overflow-y-auto">
-			<p-virtualScroller
-				[items]="menuItems"
-				[itemSize]="60"
-				styleClass="border-none"
-				scrollHeight="calc(100vh - 120px)"
+			<p-tree
+				[value]="menuItemsTree"
+				selectionMode="single"
+				(onNodeSelect)="navegar($event)"
+				[style]="{ border: 'none', height: 'calc(100vh - 120px)', overflow: 'auto', backgroundColor: '#0F1E32FF' }"
+				[filter]="true"
+				filterPlaceholder="Buscar..."
 			>
 				<ng-template pTemplate="item" let-item>
 					<ng-container *ngIf="!item.disabled; else deshabilitado">
@@ -57,7 +59,7 @@
 						</div>
 					</ng-template>
 				</ng-template>
-			</p-virtualScroller>
+			</p-tree>
 		</div>
 	</aside>
 

@@ -29,18 +29,9 @@ export class SessionService {
 			const token = this.authService.getToken();
 			if (!token) return;
 
-			const payload: { exp: number } = JSON.parse(atob(token.split('.')[1]));
-			const expiracion = payload.exp * 1000;
-			const tiempoRestante = expiracion - Date.now();
 			const tiempoInactivo = Date.now() - this.lastActivity;
 
-			if (tiempoRestante <= 0) {
-				console.warn('Token expirado. Cerrando sesión...');
-				this.logoutAndRedirect('expirado');
-				return;
-			}
-
-			if (tiempoInactivo >= 3 * 60 * 1000) {
+			if (tiempoInactivo >= 2 * 60 * 1000) {
 				console.warn('Usuario inactivo por 3 minutos. Cerrando sesión...');
 				this.logoutAndRedirect('inactividad');
 			}

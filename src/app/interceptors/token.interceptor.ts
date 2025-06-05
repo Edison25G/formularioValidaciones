@@ -4,7 +4,6 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ErrorService } from '../auth/core/services/error.service';
-import { isTokenExpired } from '../dashboard/core/utils/auth.utils';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -17,12 +16,6 @@ export class TokenInterceptor implements HttpInterceptor {
 		const token = localStorage.getItem('token');
 
 		if (token) {
-			if (isTokenExpired(token)) {
-				localStorage.clear();
-				this.router.navigate(['/auth/login']);
-				return throwError(() => new Error('Token expirado'));
-			}
-
 			req = req.clone({
 				setHeaders: { Authorization: `Bearer ${token}` },
 			});

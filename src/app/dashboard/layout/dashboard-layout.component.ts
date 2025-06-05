@@ -1,29 +1,27 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { MenuItem } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-//import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PopoverModule } from 'primeng/popover';
 import { AuthService } from '@auth/core/services/auth.service';
-import { ScrollerModule } from 'primeng/scroller';
 import { FooterComponent } from '@common/components';
 import { CategoryService } from '@dashboard/core/services/categories.service';
 import { MenuService } from '@dashboard/core/services/menu.service';
 import { SessionService } from '@dashboard/core/services/sessions.service';
+import { TreeModule } from 'primeng/tree';
+import { TreeNode } from 'primeng/api';
 
 @Component({
 	selector: 'amc-dashboard-layout',
 	standalone: true,
-	imports: [RouterOutlet, CommonModule, RouterModule, PopoverModule, ScrollerModule, FooterComponent],
+	imports: [RouterOutlet, CommonModule, RouterModule, PopoverModule, FooterComponent, TreeModule],
 	templateUrl: './dashboard-layout.component.html',
 	styleUrls: ['./dashboard-layout.component.css'],
 })
 export class DashboardLayoutComponent implements OnInit {
 	menuOpen = false;
 	isMobile = false;
-	menuItems!: MenuItem[];
-
+	menuItemsTree: TreeNode[] = [];
 	user = {
 		username: '',
 		role: '',
@@ -61,41 +59,46 @@ export class DashboardLayoutComponent implements OnInit {
 	private cargarMenu(): void {
 		const isAdmin = this.user.role === 'admin';
 
-		const baseItems: MenuItem[] = [
-			{
-				label: 'Inicio',
-				icon: 'pi pi-home',
-				routerLink: isAdmin ? '/dashboard/home' : '/dashboard/user-home',
-			},
-			...(isAdmin
-				? [
-						{ label: 'Usuarios', icon: 'pi pi-users', routerLink: '/dashboard/users' },
-						{
-							label: 'Gestionar Categorías',
-							icon: 'pi pi-tags',
-							routerLink: '/dashboard/gestionar-categorias',
-						},
-					]
-				: []),
-			{ label: 'Archivos', icon: 'pi pi-folder', routerLink: '/dashboard/archivos' },
-			{ label: 'Configuración', icon: 'pi pi-cog', routerLink: '/dashboard/configuracion' },
-		];
-
-		this.categoryService.getCategories().subscribe((categorias: { name: string; slug: string; icon: string }[]) => {
-			const categoriasMenu: MenuItem[] = categorias
-				.filter((cat) => isAdmin || this.user.categoriasPermitidas.includes(cat.slug))
-				.map((cat) => ({
-					label: cat.name,
-					icon: cat.icon || 'pi pi-folder',
-					routerLink: `/dashboard/categoria/${cat.slug}`,
-				}));
-
-			this.menuItems = [...baseItems, ...categoriasMenu];
+		this.categoryService.getCategoriesTree().subscribe((categorias) => {
+			const categoriasTree = this.formatearCategoriasTree(categorias);
+			this.menuItemsTree = [
+				{
+					label: 'Inicio',
+					icon: 'pi pi-home',
+					data: isAdmin ? '/dashboard/home' : '/dashboard/user-home',
+				},
+				...(isAdmin
+					? [
+							{ label: 'Usuarios', icon: 'pi pi-users', data: '/dashboard/users' },
+							{ label: 'Gestionar Categorías', icon: 'pi pi-tags', data: '/dashboard/gestionar-categorias' },
+						]
+					: []),
+				{ label: 'Archivos', icon: 'pi pi-folder', data: '/dashboard/archivos' },
+				{ label: 'Configuración', icon: 'pi pi-cog', data: '/dashboard/configuracion' },
+				...categoriasTree,
+			];
 		});
 	}
 
-	private formatearNombre(slug: string): string {
-		return slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+	private formatearCategoriasTree(categorias: any[]): TreeNode[] {
+		const isAdmin = this.user.role === 'admin';
+
+		return categorias
+			.filter((cat) => isAdmin || this.user.categoriasPermitidas.includes(cat.slug))
+			.map((cat) => ({
+				label: cat.name,
+				icon: cat.icon || 'pi pi-folder',
+				data: `/dashboard/categoria/${cat.slug}`,
+				children: cat.subcategories ? this.formatearCategoriasTree(cat.subcategories) : [],
+			}));
+	}
+
+	navegar(event: any): void {
+		const link = event.node.data;
+		if (link) {
+			this.menuOpen = false;
+			this.router.navigate([link]);
+		}
 	}
 
 	logout(): void {

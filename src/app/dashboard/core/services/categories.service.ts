@@ -27,4 +27,12 @@ export class CategoryService {
 	eliminarCategoria(id: number): Observable<void> {
 		return this.http.delete<void>(`${this.apiBaseUrl}/${id}`);
 	}
+
+	getCategoriesTree(): Observable<Categoria[]> {
+		return this.http.get<Categoria[]>(`${this.apiBaseUrl}/tree`);
+	}
+
+	crearSubcategoria(subcategoria: Categoria): Observable<Categoria> {
+		return this.crearCategoria(subcategoria);
+	}
 }
