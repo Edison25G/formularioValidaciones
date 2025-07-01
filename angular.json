@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "digitalizacionAmanecer": {
+    "formulariovalidaciones": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/digitalizacion-amanecer",
+            "outputPath": "dist/formulario-validaciones",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -71,10 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "digitalizacionAmanecer:build:production"
+              "buildTarget": "formulariovalidaciones:build:production"
             },
             "development": {
-              "buildTarget": "digitalizacionAmanecer:build:development"
+              "buildTarget": "formulariovalidaciones:build:development"
             }
           },
           "defaultConfiguration": "development"
