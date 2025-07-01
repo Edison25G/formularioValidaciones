@@ -2,24 +2,17 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
 	{
-		path: 'auth',
-		loadChildren: () => import('./auth/auth.routes'),
+		path: 'form',
+		loadChildren: () => import('./form/form.routes'),
 	},
-
-	{
-		path: 'dashboard',
-		loadChildren: () => import('./dashboard/dashboard.routes'),
-	},
-
 	{
 		path: '',
-		redirectTo: '/auth/login',
+		redirectTo: '/form/formulario-personal',
 		pathMatch: 'full',
 	},
-
 	{
 		path: '**',
-		redirectTo: '/auth/login',
+		redirectTo: '/form/formulario-personal',
 		pathMatch: 'full',
 	},
 ];

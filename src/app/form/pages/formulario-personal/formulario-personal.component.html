@@ -1,0 +1,143 @@
+<p-toast></p-toast>
+<section>
+	<main
+		class="w-full max-w-4xl p-8 backdrop-blur-xl bg-white/20 border border-white/30 rounded-3xl shadow-2xl flex flex-col md:flex-row gap-8"
+	>
+		<div class="w-full md:w-1/2 flex flex-col justify-center items-center text-white text-center p-6">
+			<h2 class="text-3xl font-bold mb-2">👋 ¡Bienvenido/a!</h2>
+			<p class="text-sm">Completa el formulario para continuar con tu registro.</p>
+			<img
+				src="https://cdn-icons-png.flaticon.com/512/10021/10021451.png"
+				alt="Icono"
+				class="w-32 mt-6 drop-shadow-lg"
+			/>
+		</div>
+
+		<div class="w-full md:w-1/2">
+			<form [formGroup]="formulario" (ngSubmit)="enviar()" class="grid gap-4">
+				<div class="grid md:grid-cols-2 gap-4">
+					<div>
+						<span class="block font-medium text-white">Nombre</span>
+						<input
+							pInputText
+							formControlName="nombre"
+							[ngClass]="{ 'p-invalid': formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched }"
+							class="w-full"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Apellido</span>
+						<input
+							pInputText
+							formControlName="apellido"
+							[ngClass]="{ 'p-invalid': formulario.get('apellido')?.invalid && formulario.get('apellido')?.touched }"
+							class="w-full"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Cédula / RUC</span>
+						<input
+							pInputText
+							formControlName="cedula"
+							[ngClass]="{ 'p-invalid': formulario.get('cedula')?.invalid && formulario.get('cedula')?.touched }"
+							class="w-full"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Teléfono</span>
+						<input
+							pInputText
+							formControlName="telefono"
+							[ngClass]="{ 'p-invalid': formulario.get('telefono')?.invalid && formulario.get('telefono')?.touched }"
+							class="w-full"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Fecha de Nacimiento</span>
+						<p-calendar
+							formControlName="fechaNacimiento"
+							[minDate]="fechaMinima"
+							[maxDate]="fechaMaxima"
+							dateFormat="dd/mm/yy"
+							class="w-full block"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Género</span>
+						<p-dropdown
+							[options]="generos"
+							formControlName="genero"
+							placeholder="Seleccione género"
+							class="w-full block"
+						></p-dropdown>
+					</div>
+
+					<div class="md:col-span-2">
+						<span class="block font-medium text-white">Dirección</span>
+						<input
+							pInputText
+							formControlName="direccion"
+							[ngClass]="{ 'p-invalid': formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched }"
+							class="w-full"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Salario</span>
+						<input
+							pInputText
+							type="number"
+							formControlName="salario"
+							[ngClass]="{ 'p-invalid': formulario.get('salario')?.invalid && formulario.get('salario')?.touched }"
+							class="w-full"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Email</span>
+						<input
+							pInputText
+							type="email"
+							formControlName="email"
+							[ngClass]="{ 'p-invalid': formulario.get('email')?.invalid && formulario.get('email')?.touched }"
+							class="w-full"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Sitio Web</span>
+						<input
+							pInputText
+							type="url"
+							formControlName="sitioWeb"
+							[ngClass]="{ 'p-invalid': formulario.get('sitioWeb')?.invalid && formulario.get('sitioWeb')?.touched }"
+							class="w-full"
+						/>
+					</div>
+
+					<div>
+						<span class="block font-medium text-white">Contraseña</span>
+						<p-password
+							formControlName="contrasena"
+							toggleMask
+							feedback="false"
+							class="w-full"
+							[inputStyle]="{ 'font-size': '0.93rem', padding: '0.5rem', height: '2.5rem' }"
+						></p-password>
+					</div>
+				</div>
+
+				<div class="flex justify-center gap-4 mt-6">
+					<p-button label="Enviar" icon="pi pi-check" type="submit"></p-button>
+
+					<p-button label="Limpiar" icon="pi pi-times" type="button" (click)="limpiar()"></p-button>
+				</div>
+			</form>
+		</div>
+	</main>
+</section>
