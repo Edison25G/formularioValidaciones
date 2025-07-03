@@ -2,10 +2,10 @@ import { Validators } from '@angular/forms';
 
 export class FormValidators {
 	static soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/;
-	static cedulaRuc = /^(\d{10}|\d{13})$/;
+	static cedula_ruc = /^(\d{10}|\d{13})$/;
 	static telefono = /^\d{10}$/;
 	static direccionSegura = /^[^<>$%&]*$/;
-	static sitioWeb = /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,6}(\/)?$/i;
+	static sitio_web = /^(https?:\/\/)?([\w-]+\.)+[a-z]{2,6}(\/)?$/i;
 	static contrasenaSegura = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,12}$/;
 
 	static nombreValidator = [
@@ -15,7 +15,7 @@ export class FormValidators {
 		Validators.pattern(FormValidators.soloLetras),
 	];
 
-	static cedulaValidator = [Validators.required, Validators.pattern(FormValidators.cedulaRuc)];
+	static cedulaValidator = [Validators.required, Validators.pattern(FormValidators.cedula_ruc)];
 
 	static telefonoValidator = [Validators.required, Validators.pattern(FormValidators.telefono)];
 
@@ -29,7 +29,7 @@ export class FormValidators {
 
 	static emailValidator = [Validators.required, Validators.email];
 
-	static sitioWebValidator = [Validators.required, Validators.pattern(FormValidators.sitioWeb)];
+	static sitioWebValidator = [Validators.required, Validators.pattern(FormValidators.sitio_web)];
 
 	static contrasenaValidator = [
 		Validators.required,

@@ -9,6 +9,8 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { FormValidators } from '../../../utils/form.validators';
+import { FormService } from '../../core/services/form.service';
+
 @Component({
 	selector: 'app-formulario-personal',
 	standalone: true,
@@ -35,23 +37,25 @@ export class FormularioPersonalComponent implements OnInit {
 	constructor(
 		private fb: FormBuilder,
 		private messageService: MessageService,
+		private formService: FormService,
 	) {}
 
 	ngOnInit(): void {
 		this.formulario = this.fb.group({
 			nombre: ['', FormValidators.nombreValidator],
 			apellido: ['', FormValidators.nombreValidator],
-			cedula: ['', FormValidators.cedulaValidator],
+			cedula_ruc: ['', FormValidators.cedulaValidator],
 			telefono: ['', FormValidators.telefonoValidator],
-			fechaNacimiento: ['', Validators.required],
+			fecha_nacimiento: ['', Validators.required],
 			genero: ['', Validators.required],
 			direccion: ['', FormValidators.direccionValidator],
 			salario: ['', FormValidators.salarioValidator],
 			email: ['', FormValidators.emailValidator],
-			sitioWeb: ['', FormValidators.sitioWebValidator],
+			sitio_web: ['', FormValidators.sitioWebValidator],
 			contrasena: ['', FormValidators.contrasenaValidator],
 		});
 	}
+
 	enviar() {
 		this.formulario.markAllAsTouched();
 
@@ -86,7 +90,7 @@ export class FormularioPersonalComponent implements OnInit {
 			return;
 		}
 
-		if (controls['cedula'].invalid) {
+		if (controls['cedula_ruc'].invalid) {
 			this.messageService.add({
 				severity: 'error',
 				summary: 'Cédula/RUC inválida',
@@ -104,7 +108,7 @@ export class FormularioPersonalComponent implements OnInit {
 			return;
 		}
 
-		if (controls['fechaNacimiento'].invalid) {
+		if (controls['fecha_nacimiento'].invalid) {
 			this.messageService.add({
 				severity: 'error',
 				summary: 'Fecha de nacimiento inválida',
@@ -149,7 +153,7 @@ export class FormularioPersonalComponent implements OnInit {
 			return;
 		}
 
-		if (controls['sitioWeb'].invalid) {
+		if (controls['sitio_web'].invalid) {
 			this.messageService.add({
 				severity: 'error',
 				summary: 'Sitio web inválido',
@@ -167,13 +171,29 @@ export class FormularioPersonalComponent implements OnInit {
 			return;
 		}
 
-		this.messageService.add({
-			severity: 'success',
-			summary: 'Formulario enviado',
-			detail: 'Los datos fueron validados correctamente.',
+		const formData = {
+			...this.formulario.value,
+			fecha_nacimiento: this.formulario.value.fecha_nacimiento.toISOString().split('T')[0],
+		};
+
+		this.formService.enviarFormulario(formData).subscribe({
+			next: () => {
+				this.messageService.add({
+					severity: 'success',
+					summary: 'Formulario enviado',
+					detail: 'Los datos fueron guardados correctamente.',
+				});
+				this.formulario.reset();
+			},
+			error: (error) => {
+				console.error('Error al enviar al backend:', error);
+				this.messageService.add({
+					severity: 'error',
+					summary: 'Error al enviar',
+					detail: 'Ocurrió un error al guardar los datos.',
+				});
+			},
 		});
-		console.log('Datos enviados:', this.formulario.value);
-		this.formulario.reset();
 	}
 
 	limpiar() {

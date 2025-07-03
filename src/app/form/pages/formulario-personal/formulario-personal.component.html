@@ -40,8 +40,10 @@
 						<span class="block font-medium text-white">Cédula / RUC</span>
 						<input
 							pInputText
-							formControlName="cedula"
-							[ngClass]="{ 'p-invalid': formulario.get('cedula')?.invalid && formulario.get('cedula')?.touched }"
+							formControlName="cedula_ruc"
+							[ngClass]="{
+								'p-invalid': formulario.get('cedula_ruc')?.invalid && formulario.get('cedula_ruc')?.touched,
+							}"
 							class="w-full"
 						/>
 					</div>
@@ -59,7 +61,8 @@
 					<div>
 						<span class="block font-medium text-white">Fecha de Nacimiento</span>
 						<p-calendar
-							formControlName="fechaNacimiento"
+							formControlName="fecha_nacimiento"
+							[showIcon]="true"
 							[minDate]="fechaMinima"
 							[maxDate]="fechaMaxima"
 							dateFormat="dd/mm/yy"
@@ -114,8 +117,8 @@
 						<input
 							pInputText
 							type="url"
-							formControlName="sitioWeb"
-							[ngClass]="{ 'p-invalid': formulario.get('sitioWeb')?.invalid && formulario.get('sitioWeb')?.touched }"
+							formControlName="sitio_web"
+							[ngClass]="{ 'p-invalid': formulario.get('sitio_web')?.invalid && formulario.get('sitio_web')?.touched }"
 							class="w-full"
 						/>
 					</div>
